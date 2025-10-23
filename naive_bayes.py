@@ -17,7 +17,8 @@ def train_naive_bayes_model():
     the data. 
     
     '''
-    url = "https://raw.githubusercontent.com/lavanya-vanwyk/spam-detection-data/97e84dfd335eb39ab8a2232ef91b1f3a98f74263/emails.csv"se = urllib.request.urlopen(url)
+    url = "https://raw.githubusercontent.com/lavanya-vanwyk/spam-detection-data/97e84dfd335eb39ab8a2232ef91b1f3a98f74263/emails.csv"
+    response = urllib.request.urlopen(url)
     data = response.read()
     data_as_str = data.decode("utf-8")
     csv_file = io.StringIO(data_as_str)
