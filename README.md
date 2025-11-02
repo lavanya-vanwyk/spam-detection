@@ -27,6 +27,7 @@ Other implementation strategies I used were cleaning the data strings with regex
 
 ## Retrospection
 Most of my debugging was tweaking errors in my probability calculations, however I am proud to say that this program correctly identifies 98.0% of spam emails as spam, and 98.0% of not spam emails as not spam.
+
 <img width="508" height="81" alt="image" src="https://github.com/user-attachments/assets/d3618b8e-30cb-4ef7-87a5-f3352c980063" />
 
 ## What's next
