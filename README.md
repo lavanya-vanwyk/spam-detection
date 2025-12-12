@@ -7,7 +7,9 @@ a spam, or not spam email.
 
 The aim of this program was to be able to read the contents of the text file and based on each
 word, determine the level of spam, incrementing as spam words are encountered. The project constraints were to try to build this without any
-external libraries, just pure Python.
+external libraries, just pure Python. 
+
+As of December 2025, this project is deployed live through Streamlit. You can test it via the link below!
 
 ## Project approach
 Project restrictions: May only use built-in Python modules/packages
@@ -31,11 +33,11 @@ Most of my debugging was tweaking errors in my probability calculations, however
 <img width="508" height="81" alt="image" src="https://github.com/user-attachments/assets/d3618b8e-30cb-4ef7-87a5-f3352c980063" />
 
 ## What's next
-
-I plan to update the classifier to allow the user to choose between spam detection or sentiment analysis. 
+- [x] Deployment to live website
+- [] Update classifier to allow the user to choose between spam detection or sentiment analysis 
 
 ## Running instructions
-
+Try it [live!](https://spam-detection-l-vanwyk.streamlit.app/)
 Clone the repository:
 
 `$ git clone https://github.com/lavanya-vanwyk/spam-detection
