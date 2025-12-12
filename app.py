@@ -53,7 +53,6 @@ def predict_message(text, prior_probabilities, likelihoods, unique_words, all_wo
         return "NOT SPAM", "green", spam_percentage
 
 st.title("Email Spam Detector")
-st.title("Email Spam Detector")
 st.markdown("Paste an email below or upload a text file to check if it's **Spam** or **Ham**.")
 
 #load the model
