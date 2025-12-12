@@ -26,6 +26,7 @@ def predict_message(text, prior_probabilities, likelihoods, unique_words, all_wo
 
     for category in prior_probabilities:
         current_val = math.log(prior_probabilities[category])
+        
         for word in check_list:
             if word in likelihoods[category]:
                 current_val += math.log(likelihoods[category][word])
@@ -34,11 +35,22 @@ def predict_message(text, prior_probabilities, likelihoods, unique_words, all_wo
                 current_val += math.log(new_word_likelihood)
         spamicity_hamicity[category] = current_val
 
-    #return result and a color for the UI
-    if spamicity_hamicity[1] > spamicity_hamicity[0]:
-        return "SPAM", "red"
+    log_spam = spamicity_hamicity[1]
+    log_ham = spamicity_hamicity[0]
+
+    max_val = max(log_spam, log_ham)
+
+    prob_spam = math.exp(log_spam - max_val)
+    prob_ham = math.exp(log_ham - max_val)
+
+    total = prob_spam + prob_ham
+    spam_percentage = (prob_spam / total) * 100
+    ham_percentage = (prob_ham / total) * 100
+
+    if log_spam > log_ham:
+        return "SPAM", "red", spam_percentage
     else:
-        return "NOT SPAM (HAM)", "green"
+        return "NOT SPAM", "green", spam_percentage
 
 st.title("Email Spam Detector")
 st.markdown("Paste an email below or upload a text file to check if it's **Spam** or **Ham**.")
@@ -68,10 +80,20 @@ with tab2:
         st.info("File uploaded successfully!")
 
 if input_text:
-    prediction, color = predict_message(input_text, prior_probabilities, likelihoods, unique_words, all_words)
+    prediction, color, confidence = predict_message(input_text, prior_probabilities, likelihoods, unique_words, all_words)
     
     st.divider()
-    st.subheader("Prediction:")
-    st.markdown(f"## :{color}[{prediction}]")
+    col1, col2 = st.columns([1, 2])
+    
+    with col1:
+        st.subheader(f":{color}[{prediction}]")
+        st.metric("Confidence Score", f"{confidence:.1f}%")
+        
+    with col2:
+        st.write("Confidence Bar:")
+        if prediction == "SPAM":
+            st.progress(int(confidence), text="Spam Probability")
+        else:
+            st.progress(int(confidence), text="Safety Probability")
 elif input_text == "":
     st.warning("Please enter some text to analyze.")
