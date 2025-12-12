@@ -1,4 +1,5 @@
 import urllib.request
+import os
 import pickle
 import io
 import csv
@@ -82,11 +83,15 @@ def save_model(prior_probabilities, likelihoods, unique_words, all_words):
         pickle.dump(model_data, f)
 
 def load_model():
-    with open(model_file, 'rb') as f:
-        model_data = pickle.load(f)
-    return (
-        model_data['prior_probabilities'], 
-        model_data['likelihoods'], 
-        model_data['unique_words'], 
-        model_data['all_words']
-    )
+    for file in os.listdir("."):
+        if file.endswith(".pkl"):
+            with open(model_file, 'rb') as f:
+                model_data = pickle.load(f)
+            return (
+                model_data['prior_probabilities'], 
+                model_data['likelihoods'], 
+                model_data['unique_words'], 
+                model_data['all_words']
+        )
+        else:
+            return None
