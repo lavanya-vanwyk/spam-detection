@@ -24,7 +24,7 @@ def detect_spam(file, prior_probabilities, likelihoods, unique_words, all_words)
 
         for category in prior_probabilities:
             # value to hold spam/hamicity of currrent checked word
-            current_val = prior_probabilities[category]
+            current_val = math.log(prior_probabilities[category])
             for word in check_list:
                 if word in likelihoods[category]:
                     current_val += math.log(likelihoods[category][word])
