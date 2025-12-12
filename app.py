@@ -19,19 +19,17 @@ def get_model():
         return prior_probabilities, likelihoods, unique_words, all_words
 
 def predict_message(text, prior_probabilities, likelihoods, unique_words, all_words):
-    # Clean the input text just like in your main.py
     c_check_words = re.sub(r'[^a-zA-Z0-9\s]', '', text)
     check_list = c_check_words.lower().split()
 
     spamicity_hamicity = {}
 
     for category in prior_probabilities:
-        current_val = prior_probabilities[category]
+        current_val = math.log(prior_probabilities[category])
         for word in check_list:
             if word in likelihoods[category]:
                 current_val += math.log(likelihoods[category][word])
             else: 
-                # Word not in testing set
                 new_word_likelihood = 1 / (all_words + len(unique_words))
                 current_val += math.log(new_word_likelihood)
         spamicity_hamicity[category] = current_val
@@ -42,7 +40,7 @@ def predict_message(text, prior_probabilities, likelihoods, unique_words, all_wo
     else:
         return "NOT SPAM (HAM)", "green"
 
-st.title("📧 Email Spam Detector")
+st.title("Email Spam Detector")
 st.markdown("Paste an email below or upload a text file to check if it's **Spam** or **Ham**.")
 
 #load the model
