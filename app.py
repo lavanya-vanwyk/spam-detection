@@ -4,22 +4,22 @@ import math
 import re
 
 st.set_page_config(page_title="Spam Detector", page_icon="📧")
+
 @st.cache_resource
 def get_model():
-    # load model
+    #try to load model
     model_params = naive_bayes.load_model()
     
     if model_params:
         return model_params
-    
-    # train model if not found
-    
+
     with st.spinner("Training model for the first time... (Downloading dataset)"):
         prior_probabilities, likelihoods, unique_words, all_words = naive_bayes.train_naive_bayes_model()
         naive_bayes.save_model(prior_probabilities, likelihoods, unique_words, all_words)
         return prior_probabilities, likelihoods, unique_words, all_words
 
 def predict_message(text, prior_probabilities, likelihoods, unique_words, all_words):
+    # Clean the input text just like in your main.py
     c_check_words = re.sub(r'[^a-zA-Z0-9\s]', '', text)
     check_list = c_check_words.lower().split()
 
@@ -31,11 +31,12 @@ def predict_message(text, prior_probabilities, likelihoods, unique_words, all_wo
             if word in likelihoods[category]:
                 current_val += math.log(likelihoods[category][word])
             else: 
-                #word not in testing set
+                # Word not in testing set
                 new_word_likelihood = 1 / (all_words + len(unique_words))
                 current_val += math.log(new_word_likelihood)
         spamicity_hamicity[category] = current_val
 
+    #return result and a color for the UI
     if spamicity_hamicity[1] > spamicity_hamicity[0]:
         return "SPAM", "red"
     else:
@@ -44,13 +45,14 @@ def predict_message(text, prior_probabilities, likelihoods, unique_words, all_wo
 st.title("📧 Email Spam Detector")
 st.markdown("Paste an email below or upload a text file to check if it's **Spam** or **Ham**.")
 
+#load the model
 try:
     prior_probabilities, likelihoods, unique_words, all_words = get_model()
 except Exception as e:
     st.error(f"Error loading model: {e}")
     st.stop()
 
-#one for text, one for file
+
 tab1, tab2 = st.tabs(["Paste Text", "Upload File"])
 
 input_text = None
@@ -63,7 +65,7 @@ with tab1:
 with tab2:
     uploaded_file = st.file_uploader("Upload a .txt file", type=["txt"])
     if uploaded_file is not None:
-        # decode file bytes to string
+        #decode the uploaded file bytes to string
         input_text = uploaded_file.read().decode("utf-8", errors="ignore")
         st.info("File uploaded successfully!")
 
